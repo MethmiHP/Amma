@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Mother's Day!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #eef1f5 100%);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 340px;
+            height: 240px;
+            perspective: 1500px;
+            z-index: 10;
+        }
+
+        .envelope {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 1s ease;
+        }
+
+        .envelope.open {
+            transform: rotateX(180deg);
+        }
+
+        .envelope-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #ff9eb5;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            backface-visibility: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .envelope-flap {
+            width: 100%;
+            height: 40%;
+            background-color: #ff7a9e;
+            clip-path: polygon(0 100%, 50% 40%, 100% 100%, 100% 0, 0 0);
+            transform-origin: top;
+            transition: transform 0.4s ease;
+        }
+
+        .envelope:hover .envelope-flap {
+            transform: rotateX(10deg);
+        }
+
+        .envelope-body {
+            flex: 1;
+            background-color: #ff9eb5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .heart {
+            width: 30px;
+            height: 30px;
+            background-color: white;
+            position: relative;
+            transform: rotate(-45deg);
+            animation: pulse 1.5s infinite;
+        }
+
+        .heart::before, 
+        .heart::after {
+            content: "";
+            width: 30px;
+            height: 30px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .heart::before {
+            top: -15px;
+            left: 0;
+        }
+
+        .heart::after {
+            top: 0;
+            left: 15px;
+        }
+
+        @keyframes pulse {
+            0% { transform: rotate(-45deg) scale(1); }
+            50% { transform: rotate(-45deg) scale(1.2); }
+            100% { transform: rotate(-45deg) scale(1); }
+        }
+
+        .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #ff7a9e;
+            border-radius: 5px;
+            transform: rotateX(180deg);
+            backface-visibility: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .letter {
+            position: absolute;
+            width: 80%;
+            height: 80%;
+            background-color: white;
+            border-radius: 5px;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .envelope.open .letter {
+            opacity: 1;
+            transform: translateY(0);
+            transition-delay: 0.5s;
+        }
+
+        .message {
+            font-size: 24px;
+            color: #ff5483;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .sub-message {
+            font-size: 16px;
+            color: #ff7a9e;
+        }
+
+        /* Garden and flower styles */
+        .garden {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .flower-container {
+            position: absolute;
+            bottom: -20px;
+            transform-origin: bottom center;
+            animation: grow-flower 3s ease-out forwards;
+            opacity: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Flower head first, then stem below it */
+        .flower-head {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            margin: 0 auto;
+            transform-origin: center bottom;
+            animation: bloom 1.5s ease-out forwards;
+            animation-delay: 2s;
+            transform: scale(0);
+            z-index: 2;
+        }
+
+        .stem {
+            width: 6px;
+            height: 80px;
+            background: linear-gradient(to bottom, #2ecc71, #27ae60);
+            position: relative;
+            margin-top: -5px;
+            z-index: 1;
+        }
+
+        .leaf {
+            position: absolute;
+            width: 30px;
+            height: 20px;
+            background-color: #2ecc71;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+        }
+
+        .leaf.left {
+            left: -20px;
+            top: 20px;
+            transform: rotate(-135deg);
+        }
+
+        .leaf.right {
+            right: -20px;
+            top: 40px;
+        }
+
+        .petal {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            border-radius: 50% 50% 50% 50%;
+            top: 12.5px;
+            left: 12.5px;
+            transform-origin: center center;
+        }
+
+        .center {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            top: 15px;
+            left: 15px;
+            z-index: 10;
+        }
+
+        @keyframes grow-flower {
+            0% {
+                transform: scale(0.1);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes bloom {
+            0% {
+                transform: scale(0) rotate(0deg);
+            }
+            50% {
+                transform: scale(0.5) rotate(15deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+        }
+
+        @keyframes sway {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(2deg); }
+            50% { transform: rotate(0deg); }
+            75% { transform: rotate(-2deg); }
+            100% { transform: rotate(0deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="garden" id="garden"></div>
+    <div class="container">
+        <div class="envelope" id="envelope">
+            <div class="envelope-front">
+                <div class="envelope-flap"></div>
+                <div class="envelope-body">
+                    <div class="heart"></div>
+                </div>
+            </div>
+            <div class="envelope-back">
+                <div class="letter">
+                    <div class="message">Happy Mother's Day Amma,</div>
+                    <div class="sub-message">I love you so much</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Create garden with blooming flowers
+        const garden = document.getElementById('garden');
+        const flowerCount = 15;
+        const maxHeight = window.innerHeight * 0.6; // Flowers will grow up to 60% of screen height
+        
+        // Flower color palettes (each flower will use one palette)
+        const flowerPalettes = [
+            // Pink/Purple palette
+            {petals: ['#FF9EBF', '#FF71A6', '#FF499E', '#F368E0', '#D980FA'], center: '#FECA57'},
+            // Blue palette
+            {petals: ['#54A0FF', '#2E86DE', '#70C1FF', '#48DBFB', '#1E90FF'], center: '#FECA57'},
+            // Orange/Red palette
+            {petals: ['#FF7F50', '#FF6B6B', '#FFA502', '#FF4757', '#FF5E57'], center: '#F9CA24'},
+            // Purple/Lavender
+            {petals: ['#D6A2E8', '#B86FE9', '#9370DB', '#8E44AD', '#C56CF0'], center: '#FFF200'},
+            // Multi-color pastels
+            {petals: ['#FEA47F', '#BDC581', '#55E6C1', '#FD7272', '#B8E994'], center: '#F6E58D'}
+        ];
+
+        for (let i = 0; i < flowerCount; i++) {
+            // Create flower container
+            const flowerContainer = document.createElement('div');
+            flowerContainer.classList.add('flower-container');
+            
+            // Random position horizontally
+            const left = Math.random() * 100;
+            flowerContainer.style.left = `${left}%`;
+            
+            // Random height (how tall the flower grows)
+            const stemHeight = Math.random() * (maxHeight * 0.6) + (maxHeight * 0.4); // Between 40-100% of maxHeight
+            
+            // Random delay for growing animation
+            const delay = Math.random() * 5;
+            flowerContainer.style.animationDelay = `${delay}s`;
+            
+            // Add some variation in size
+            const scale = 0.7 + Math.random() * 0.6; // Scale between 0.7 and 1.3
+            flowerContainer.style.transform = `scale(${scale})`;
+            
+            // Add subtle sway animation
+            const swayDuration = 3 + Math.random() * 4;
+            flowerContainer.style.animation = `grow-flower 3s ease-out forwards ${delay}s, sway ${swayDuration}s ease-in-out infinite ${delay + 3}s`;
+            
+            // Create flower head first (will be at the top)
+            const flowerHead = document.createElement('div');
+            flowerHead.classList.add('flower-head');
+            
+            // Select a random color palette
+            const palette = flowerPalettes[Math.floor(Math.random() * flowerPalettes.length)];
+            
+            // Create petals (8 petals arranged in a circle)
+            for (let j = 0; j < 8; j++) {
+                const petal = document.createElement('div');
+                petal.classList.add('petal');
+                
+                // Position petals in a circle
+                const angle = (j / 8) * 360;
+                const radius = 25;
+                const x = Math.cos(angle * Math.PI / 180) * radius;
+                const y = Math.sin(angle * Math.PI / 180) * radius;
+                
+                petal.style.transform = `translate(${x}px, ${y}px)`;
+                
+                // Random petal color from palette
+                const petalColor = palette.petals[Math.floor(Math.random() * palette.petals.length)];
+                petal.style.backgroundColor = petalColor;
+                
+                flowerHead.appendChild(petal);
+            }
+            
+            // Create flower center
+            const center = document.createElement('div');
+            center.classList.add('center');
+            center.style.backgroundColor = palette.center;
+            flowerHead.appendChild(center);
+            
+            // Then create stem (will be below the flower head)
+            const stem = document.createElement('div');
+            stem.classList.add('stem');
+            stem.style.height = `${stemHeight}px`;
+            
+            // Create leaves
+            const leafLeft = document.createElement('div');
+            leafLeft.classList.add('leaf', 'left');
+            leafLeft.style.top = `${stemHeight * 0.3}px`; // Position on stem
+            
+            const leafRight = document.createElement('div');
+            leafRight.classList.add('leaf', 'right');
+            leafRight.style.top = `${stemHeight * 0.6}px`; // Position on stem
+            
+            // Assemble the flower - flower head first, then stem
+            flowerContainer.appendChild(flowerHead);
+            stem.appendChild(leafLeft);
+            stem.appendChild(leafRight);
+            flowerContainer.appendChild(stem);
+            garden.appendChild(flowerContainer);
+        }
+
+        // Add click event to envelope
+        const envelope = document.getElementById('envelope');
+        envelope.addEventListener('click', function() {
+            this.classList.toggle('open');
+        });
+    </script>
+</body>
+</html>
